@@ -1,0 +1,107 @@
+#!/usr/bin/env ruby
+
+# Written by Tony Baltazar. August 2014.
+# Email: root[@]rubyninja.org
+
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+
+require 'getoptlong'
+
+APP_PATH = File.expand_path('.')
+#require "#{APP_PATH}/lib/openalpha01_youtube.rb"
+
+
+#
+
+ 
+def usage
+print <<EOF
+    Syntax: #{File.basename(__FILE__)} [--help|-t=<Title> --description=<Video Description> --category=<Video Category>]
+
+   --help      | -h  : This help message.
+
+   Required options.
+   --title       | -t  : Video Title.
+   --description | -d  : Video description.
+   --category    | -m  : Category type.
+   --keywords    | -k  : Video keywords.
+   --playlist    | -p  : Playlist name.
+
+    Optionally,
+   --no-upload   | -n  : No upload, just encode the video.
+   --resolution  | -n  : Video resolution.
+
+EOF
+    exit 1
+end
+
+opts = GetoptLong.new(
+    [ '--help', '-h', GetoptLong::NO_ARGUMENT ],
+    [ '--playlist', '-p', GetoptLong::REQUIRED_ARGUMENT ],
+    [ '--title', '-t', GetoptLong::REQUIRED_ARGUMENT ],
+    [ '--description', '-d', GetoptLong::REQUIRED_ARGUMENT ],
+    [ '--category', '-c', GetoptLong::REQUIRED_ARGUMENT ],
+    [ '--keywords', '-k', GetoptLong::REQUIRED_ARGUMENT ]
+)
+
+
+usage unless ARGV[0]
+
+option_calls = Hash.new
+
+begin
+opts.each do |opt, arg|
+    case opt
+        when '--help', '-h'
+        usage
+        when '--title', '-t'
+            option_calls[:title] = arg
+        when '--description', '-d'
+            option_calls[:description] = arg
+        when '--category', '-c'
+            option_calls[:category] = arg
+        when '--keywords', '-k'
+            option_calls[:keywords] = arg
+        when '--playlist', '-p'
+            option_calls[:playlist] = arg
+        when '--no-upload', '-n'
+            option_calls[:no_upload] = arg
+        when '--resolution', '-r'
+            option_calls[:resolution] = arg
+        else
+            usage
+        end
+end
+rescue
+    usage
+end
+
+usage if option_calls.size <= 4
+#puts option_calls.inspect
+
+exit
+begin
+    # Shit to do:
+    #1. Transcode video.
+    #2. Add title to transcoded video.
+    #3. Connect to Youtube and upload video.
+    youtube = OpenAlpha01YouTube.new(client_refresh_token: "", client_id: "", client_secret: "", dev_key: "")
+    youtube.upload_video
+
+rescue => msg_error
+    
+else
+
+end
