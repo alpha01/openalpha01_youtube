@@ -18,17 +18,18 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
 require 'getoptlong'
+require_relative '../lib/openalpha01_youtube'
 
-APP_PATH = File.expand_path('.')
+#APP_PATH = File.expand_path('..')
 #require "#{APP_PATH}/lib/openalpha01_youtube.rb"
 
 
-#
 
  
 def usage
 print <<EOF
-    Syntax: #{File.basename(__FILE__)} [--help|-t=<Title> --description=<Video Description> --category=<Video Category>]
+
+    Syntax: #{File.basename(__FILE__)} [--help|-t=<Title> --description=<Video Description> --category=<Video Category> file(s)]
 
    --help      | -h  : This help message.
 
@@ -89,7 +90,17 @@ rescue
 end
 
 usage if option_calls.size <= 4
-#puts option_calls.inspect
+puts option_calls.inspect
+
+videos = nil
+if ARGV.length == 0
+  usage
+elsif ARGV.length == 1
+  videos = ARGV[0]
+else
+  videos = ARGV
+end
+puts "Videos: #{videos}"
 
 exit
 begin
@@ -97,8 +108,8 @@ begin
     #1. Transcode video.
     #2. Add title to transcoded video.
     #3. Connect to Youtube and upload video.
-    youtube = OpenAlpha01YouTube.new(client_refresh_token: "", client_id: "", client_secret: "", dev_key: "")
-    youtube.upload_video
+#    youtube = OpenAlpha01YouTube.new(client_refresh_token: "", client_id: "", client_secret: "", dev_key: "")
+#    youtube.upload_video
 
 rescue => msg_error
     

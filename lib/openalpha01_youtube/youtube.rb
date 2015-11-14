@@ -1,41 +1,25 @@
 
-# Written by Tony Baltazar. August 2014.
-# Email: root[@]rubyninja.org
+require 'yt'
+require_relative 'config'
 
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License as
-# published by the Free Software Foundation; either version 3 of the
-# License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful, but
-# WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-# General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
-
-require 'youtube_it'
-
-
-class YouTube
-
-    attr_writer :options
-
-    def initialize(settings={})
-        @settings = settings
-        self.connect
+module OpenAlpha01YouTube
+  class YouTube
+    def initialize
+      self.connect
     end
 
-    def connect
-        begin
-            client = YouTubeIt::OAuth2Client.new(@settings)
-        rescue => connection_error
-
-        else 
-            #client.refresh_access_token!
-        end
+    def self.connect
+      Yt.configure do |config|
+        config.client_id = OpenAlpha01YouTube::Config.options['youtube_client_id']
+        config.client_secret = OpenAlpha01YouTube::Config.options['youtube_client_secret']
+        config.log_level = :debug
+      end
+      begin
+        client = Yt::Account.new refresh_token: OpenAlpha01YouTube::Config.options['youtube_client_refresh_token']
+      rescue => connection_error
+        puts "Failed to connect to YouTube!"
+        exit 1
+      end
     end
 
     def check_playlist
@@ -51,9 +35,8 @@ class YouTube
             #puts "Finished uploading!"
         #end
     end
-
+  end
 end
 
-test = YouTube.new({:title=>"Title", :description=>"Test descriptiong", :category=>"PEOPLE", :keywords=>"OC, driving", :playlist=>"dashcam"})
-
-puts test.options.inspect
+puts OpenAlpha01YouTube::YouTube.connect
+#puts test.options.inspect

@@ -1,0 +1,12 @@
+youtube_client_refresh_token: ""
+youtube_client_id: ""
+youtube_client_secret: ""
+youtube_dev_key: ""
+
+twitter_consumer_key: ""
+twitter_consumer_secret: ""
+twitter_access_token: ""
+twitter_access_token_secret: ""
+
+bitly_username: ""
+bitly_access_token: ""

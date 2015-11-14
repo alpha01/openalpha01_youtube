@@ -1,6 +1,8 @@
 source 'https://rubygems.org'
 
-gem 'youtube_it'
-
+gem 'yt'
 gem 'rmagick'
+gem 'bitly'
+gem 'twitter'
 
+gem 'rspec'
